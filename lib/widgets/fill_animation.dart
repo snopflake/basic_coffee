@@ -1,10 +1,9 @@
-// lib/widgets/fill_animation.dart
 import 'package:flutter/material.dart';
 
 class FillAnimation extends StatefulWidget {
-  final Widget child;            // isi card (icon + teks + tombol)
-  final Color backgroundColor;   // warna abu-abu card
-  final Color fillColor;         // warna fill
+  final Widget child;            
+  final Color backgroundColor;  
+  final Color fillColor;         
   final Duration duration;
 
   const FillAnimation({

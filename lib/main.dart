@@ -13,7 +13,7 @@ class MainApp extends StatelessWidget {
       title: 'Basic Coffee Redeem',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.brown,
+        primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.white,
         textTheme: GoogleFonts.interTextTheme(),   
       ),

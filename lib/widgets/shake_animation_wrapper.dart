@@ -1,4 +1,3 @@
-// lib/widgets/shake_animation_wrapper.dart
 import 'package:flutter/material.dart';
 
 class ShakeAnimationWrapper extends StatefulWidget {
@@ -29,7 +28,7 @@ class ShakeAnimationWrapperState extends State<ShakeAnimationWrapper>
     ]).animate(CurvedAnimation(parent: _ctrl, curve: Curves.linear));
   }
 
-  /// Panggil untuk shake
+  /// Panggil untuk shake via GlobalKey
   void shake() {
     _ctrl.forward(from: 0.0);
   }

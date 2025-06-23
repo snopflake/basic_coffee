@@ -1,5 +1,3 @@
-// lib/widgets/coffee_card.dart
-
 import 'package:basic_coffee/models/coffee.dart';
 import 'package:basic_coffee/widgets/custom_snackbar.dart';
 import 'package:basic_coffee/widgets/fill_animation.dart';
@@ -61,7 +59,7 @@ class _CoffeeCardState extends State<CoffeeCard> {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    const Icon(Icons.local_cafe, size: 40, color: Colors.brown),
+                    const Icon(Icons.local_cafe, size: 40, color: Colors.indigo),
                     const SizedBox(width: 16),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,

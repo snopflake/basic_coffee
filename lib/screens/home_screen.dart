@@ -1,5 +1,3 @@
-// lib/screens/home_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:basic_coffee/data/coffee_data.dart';
@@ -21,14 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // pastikan di main.dart theme text pakai GoogleFonts.interTextTheme()
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-      ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -71,15 +63,15 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox(height: 24),
 
               // Banner 
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/banner.png',
-                  width: double.infinity,
-                  height: 140,
-                  fit: BoxFit.cover,
-                ),
+             ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Image.asset(
+                'assets/banner.png',
+                width: double.infinity,
+                fit: BoxFit.fitWidth,  
               ),
+            ),
+
 
               const SizedBox(height: 24),
 
