@@ -1,6 +1,6 @@
-# WORKSHOP FE MOBILE - Flutter Animation 🌠
+# WORKSHOP FE MOBILE - Flutter Animation🚀
 
-# Basic Coffee Redeem 🍵
+# Basic Coffee Redeem🍵
 
 A simple Flutter app that lets users “redeem” virtual tokens for delicious coffee items. Tap any card to animate a fill effect when you have enough tokens, or shake the card if you don’t — all while tracking your token balance in real time.
 
