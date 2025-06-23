@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
+/// SKELETON: peserta hanya perlu implementasi animasi fill-nya
 class FillAnimation extends StatefulWidget {
-  final Widget child;            
-  final Color backgroundColor;  
-  final Color fillColor;         
+  final Widget child;
+  final Color backgroundColor;
+  final Color fillColor;
   final Duration duration;
 
   const FillAnimation({
@@ -20,24 +21,28 @@ class FillAnimation extends StatefulWidget {
 
 class FillAnimationState extends State<FillAnimation>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _ctrl;
-  late final Animation<double> _anim;
+  // TODO: deklarasikan AnimationController & Animation<double> di sini
+  // late final AnimationController _ctrl;
+  // late final Animation<double> _anim;
 
   @override
   void initState() {
     super.initState();
-    _ctrl = AnimationController(vsync: this, duration: widget.duration);
-    _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
+    // TODO: inisialisasi _ctrl dan _anim
+    // _ctrl = AnimationController(vsync: this, duration: widget.duration);
+    // _anim = CurvedAnimation(parent: _ctrl, curve: Curves.easeInOut);
   }
 
-  /// Panggil dari luar via GlobalKey
+  /// Dipanggil dari luar (CoffeeCard) via GlobalKey
   void startFill() {
-    _ctrl.forward(from: 0.0);
+    // TODO: panggil _ctrl.forward(from: 0.0) untuk memulai animasi
+    throw UnimplementedError('Implementasikan startFill()');
   }
 
   @override
   void dispose() {
-    _ctrl.dispose();
+    // TODO: dispose _ctrl
+    // _ctrl.dispose();
     super.dispose();
   }
 
@@ -47,26 +52,23 @@ class FillAnimationState extends State<FillAnimation>
       borderRadius: BorderRadius.circular(16),
       child: Stack(
         children: [
-          // 1) background abu-abu
+          // 1) background card awal
           Positioned.fill(child: Container(color: widget.backgroundColor)),
 
-          // 2) fill warna oren
-          Positioned.fill(
-            child: AnimatedBuilder(
-              animation: _anim,
-              builder: (ctx, _) {
-                return Align(
-                  alignment: Alignment.centerLeft,
-                  child: FractionallySizedBox(
-                    widthFactor: _anim.value,
-                    child: Container(color: widget.fillColor),
-                  ),
-                );
-              },
-            ),
-          ),
+          // 2) PESERTA: tambahkan overlay animasi fill di sini
+          // contoh:
+          // AnimatedBuilder(
+          //   animation: _anim,
+          //   builder: (_, __) => Align(
+          //     alignment: Alignment.centerLeft,
+          //     child: FractionallySizedBox(
+          //       widthFactor: _anim.value,
+          //       child: Container(color: widget.fillColor),
+          //     ),
+          //   ),
+          // ),
 
-          // 3) isi card (icon + teks + tombol)
+          // 3) konten card (ikon + teks + tombol)
           Positioned.fill(child: widget.child),
         ],
       ),
