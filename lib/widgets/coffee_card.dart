@@ -1,3 +1,5 @@
+// lib/widgets/coffee_card.dart
+
 import 'package:basic_coffee/models/coffee.dart';
 import 'package:basic_coffee/widgets/custom_snackbar.dart';
 import 'package:basic_coffee/widgets/fill_animation.dart';
@@ -10,38 +12,32 @@ class CoffeeCard extends StatefulWidget {
   final Function(int) onRedeem;
 
   const CoffeeCard({
-    super.key,
+    Key? key,
     required this.coffee,
     required this.currentToken,
     required this.onRedeem,
-  });
+  }) : super(key: key);
 
   @override
-  State<CoffeeCard> createState() => _CoffeeCardState();
+  _CoffeeCardState createState() => _CoffeeCardState();
 }
 
 class _CoffeeCardState extends State<CoffeeCard> {
-  final GlobalKey<ShakeAnimationWrapperState> _shakeKey = GlobalKey();
-  final GlobalKey<FillAnimationState> _fillKey = GlobalKey();
+  final _shakeKey = GlobalKey<ShakeAnimationWrapperState>();
+  final _fillKey = GlobalKey<FillAnimationState>();
 
   void _handleTap() {
-    final price = widget.coffee.price;
-
-    if (widget.currentToken >= price) {
-      // Trigger animasi fill lewat GlobalKey
+    if (widget.currentToken >= widget.coffee.price) {
       _fillKey.currentState?.startFill();
-
-      // Callback untuk mengurangi token
-      widget.onRedeem(price);
-
-      // Tampilkan snackbar sukses
+      widget.onRedeem(widget.coffee.price);
       showCustomSnackbar(context, "Transaksi sukses, token mencukupi");
     } else {
-      // Trigger animasi shake via GlobalKey
       _shakeKey.currentState?.shake();
-
-      // Tampilkan snackbar gagal
-      showCustomSnackbar(context, "Transaksi gagal, token tidak mencukupi", success: false);
+      showCustomSnackbar(
+        context,
+        "Transaksi gagal, token tidak mencukupi",
+        success: false,
+      );
     }
   }
 
@@ -51,39 +47,46 @@ class _CoffeeCardState extends State<CoffeeCard> {
       onTap: _handleTap,
       child: ShakeAnimationWrapper(
         key: _shakeKey,
-        child: Stack(
-          children: [
-            //Fill animation wraps entire card
-            FillAnimation(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: SizedBox(
+            height: 120,
+            width: double.infinity,
+            child: FillAnimation(
               key: _fillKey,
-              child: Container(
-                height: 120,
-                width: double.infinity,
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: Colors.grey[300],
-                ),
+              backgroundColor: Colors.grey[300]!,
+              fillColor: Colors.orange,
+              duration: const Duration(milliseconds: 600),
+              child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
                     const Icon(Icons.local_cafe, size: 40, color: Colors.brown),
                     const SizedBox(width: 16),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.coffee.name,
-                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        Text('${widget.coffee.price} Token',
-                            style: const TextStyle(color: Colors.black54)),
+                        Text(
+                          widget.coffee.name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${widget.coffee.price} Token',
+                          style: const TextStyle(color: Colors.black54),
+                        ),
                       ],
                     ),
+                    const Spacer(),
+                    const Icon(Icons.shopping_cart_outlined),
                   ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

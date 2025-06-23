@@ -1,54 +1,52 @@
+// lib/widgets/shake_animation_wrapper.dart
 import 'package:flutter/material.dart';
 
 class ShakeAnimationWrapper extends StatefulWidget {
   final Widget child;
-
-  const ShakeAnimationWrapper({super.key, required this.child});
+  const ShakeAnimationWrapper({Key? key, required this.child})
+      : super(key: key);
 
   @override
-  State<ShakeAnimationWrapper> createState() => ShakeAnimationWrapperState();
+  ShakeAnimationWrapperState createState() => ShakeAnimationWrapperState();
 }
 
 class ShakeAnimationWrapperState extends State<ShakeAnimationWrapper>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  late final Animation<double> _offsetAnimation;
+  late final AnimationController _ctrl;
+  late final Animation<double> _offsetAnim;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 400),
+    _ctrl = AnimationController(
       vsync: this,
+      duration: const Duration(milliseconds: 400),
     );
-
-    _offsetAnimation = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0.0, end: -8.0), weight: 1),
-      TweenSequenceItem(tween: Tween(begin: -8.0, end: 8.0), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 8.0, end: -8.0), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: -8.0, end: 8.0), weight: 2),
-      TweenSequenceItem(tween: Tween(begin: 8.0, end: 0.0), weight: 1),
-    ]).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
+    _offsetAnim = TweenSequence<double>([
+      TweenSequenceItem(tween: Tween(begin: 0, end: -8), weight: 1),
+      TweenSequenceItem(tween: Tween(begin: -8, end: 8), weight: 2),
+      TweenSequenceItem(tween: Tween(begin: 8, end: 0), weight: 1),
+    ]).animate(CurvedAnimation(parent: _ctrl, curve: Curves.linear));
   }
 
-  // Method yang bisa dipanggil lewat GlobalKey
+  /// Panggil untuk shake
   void shake() {
-    _controller.forward(from: 0.0);
+    _ctrl.forward(from: 0.0);
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _ctrl.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _offsetAnimation,
-      builder: (context, child) {
+      animation: _offsetAnim,
+      builder: (ctx, child) {
         return Transform.translate(
-          offset: Offset(_offsetAnimation.value, 0),
+          offset: Offset(_offsetAnim.value, 0),
           child: child,
         );
       },

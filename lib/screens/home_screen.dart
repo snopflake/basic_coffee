@@ -1,22 +1,22 @@
+// lib/screens/home_screen.dart
+
+import 'package:flutter/material.dart';
 import 'package:basic_coffee/data/coffee_data.dart';
 import 'package:basic_coffee/models/coffee.dart';
 import 'package:basic_coffee/widgets/coffee_card.dart';
-import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int userToken = 500; // Token awal pengguna
+  int userToken = 500;
 
   void _redeem(int price) {
-    setState(() {
-      userToken -= price;
-    });
+    setState(() => userToken -= price);
   }
 
   @override
@@ -27,42 +27,40 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.brown[400],
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Token Display
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Token Kamu:',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                Chip(
-                  label: Text('$userToken Token'),
-                  backgroundColor: Colors.brown[200],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            // List Kopi
-            Expanded(
-              child: ListView.builder(
-                itemCount: coffeeList.length,
-                itemBuilder: (context, index) {
-                  final Coffee coffee = coffeeList[index];
-                  return CoffeeCard(
-                    coffee: coffee,
-                    currentToken: userToken,
-                    onRedeem: _redeem,
-                  );
-                },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Token display
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Token Kamu:',
+                    style:
+                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  Chip(
+                    label: Text('$userToken Token'),
+                    backgroundColor: Colors.brown[200],
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+
+              // Daftar CoffeeCard
+              for (final Coffee coffee in coffeeList)
+                CoffeeCard(
+                  coffee: coffee,
+                  currentToken: userToken,
+                  onRedeem: _redeem,
+                ),
+
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
