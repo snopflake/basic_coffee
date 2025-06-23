@@ -1,13 +1,13 @@
 // lib/screens/home_screen.dart
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:basic_coffee/data/coffee_data.dart';
 import 'package:basic_coffee/models/coffee.dart';
 import 'package:basic_coffee/widgets/coffee_card.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
+  const HomeScreen({super.key});
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -21,44 +21,127 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // pastikan di main.dart theme text pakai GoogleFonts.interTextTheme()
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Coffee Redeem'),
-        backgroundColor: Colors.brown[400],
-        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.white,
+        automaticallyImplyLeading: false,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Token display
+              // Header
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Token Kamu:',
-                    style:
-                        TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Hola! Supernova',
+                          style: GoogleFonts.inter(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Siap menjalani harimu?',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            color: Colors.black54,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Chip(
-                    label: Text('$userToken Token'),
-                    backgroundColor: Colors.brown[200],
+                  CircleAvatar(
+                    radius: 24,
+                    backgroundImage:
+                        NetworkImage('https://i.pravatar.cc/150?img=47'),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
 
-              // Daftar CoffeeCard
-              for (final Coffee coffee in coffeeList)
-                CoffeeCard(
-                  coffee: coffee,
-                  currentToken: userToken,
-                  onRedeem: _redeem,
+              const SizedBox(height: 24),
+
+              // Banner 
+              ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.asset(
+                  'assets/banner.png',
+                  width: double.infinity,
+                  height: 140,
+                  fit: BoxFit.cover,
                 ),
+              ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 24),
+
+              // Token Card
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.blue.shade800,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 8,
+                      offset: Offset(0, 4),
+                    )
+                  ],
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.account_balance_wallet_outlined,
+                      size: 32,
+                      color: Colors.amber.shade200,
+                    ),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Your Account',
+                      style: GoogleFonts.inter(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      ),
+                    ),
+                    const Spacer(),
+                    Text(
+                      '$userToken Tokens',
+                      style: GoogleFonts.inter(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const SizedBox(height: 32),
+
+              // Coffee List
+              Column(
+                children: coffeeList
+                    .map((coffee) => Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: CoffeeCard(
+                            coffee: coffee,
+                            currentToken: userToken,
+                            onRedeem: _redeem,
+                          ),
+                        ))
+                    .toList(),
+              ),
             ],
           ),
         ),
