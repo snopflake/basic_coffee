@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
 class FillAnimation extends StatefulWidget {
-  final bool shouldFill;
   final Widget child;
   final Duration duration;
   final Color fillColor;
 
   const FillAnimation({
     super.key,
-    required this.shouldFill,
     required this.child,
     this.duration = const Duration(milliseconds: 800),
     this.fillColor = Colors.orange,
   });
 
   @override
-  State<FillAnimation> createState() => _FillAnimationState();
+  FillAnimationState createState() => FillAnimationState();
 }
 
-class _FillAnimationState extends State<FillAnimation>
+class FillAnimationState extends State<FillAnimation>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _animation;
@@ -30,17 +28,14 @@ class _FillAnimationState extends State<FillAnimation>
       vsync: this,
       duration: widget.duration,
     );
+
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
   }
 
-  @override
-  void didUpdateWidget(covariant FillAnimation oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.shouldFill && !oldWidget.shouldFill) {
-      _controller.forward(from: 0.0);
-    }
+  void startFill() {
+    _controller.forward(from: 0.0);
   }
 
   @override
@@ -53,7 +48,7 @@ class _FillAnimationState extends State<FillAnimation>
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        widget.child, 
+        widget.child,
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -66,7 +61,7 @@ class _FillAnimationState extends State<FillAnimation>
                     color: widget.fillColor.withOpacity(0.5),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: widget.child, 
+                  child: widget.child,
                 ),
               ),
             );

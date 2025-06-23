@@ -1,3 +1,4 @@
+import 'package:basic_coffee/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +10,14 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Basic Coffee Redeem',
+      theme: ThemeData(
+        primarySwatch: Colors.brown,
+        scaffoldBackgroundColor: Colors.white,
       ),
+      home: const HomeScreen(),
     );
   }
 }

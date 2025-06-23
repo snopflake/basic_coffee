@@ -1,90 +1,89 @@
+import 'package:basic_coffee/models/coffee.dart';
+import 'package:basic_coffee/widgets/custom_snackbar.dart';
+import 'package:basic_coffee/widgets/fill_animation.dart';
+import 'package:basic_coffee/widgets/shake_animation_wrapper.dart';
 import 'package:flutter/material.dart';
-import '../models/coffee.dart';
 
 class CoffeeCard extends StatefulWidget {
   final Coffee coffee;
-  final bool affordable;
-  final VoidCallback onSuccess;
-  final VoidCallback onFail;
+  final int currentToken;
+  final Function(int) onRedeem;
 
   const CoffeeCard({
     super.key,
     required this.coffee,
-    required this.affordable,
-    required this.onSuccess,
-    required this.onFail,
+    required this.currentToken,
+    required this.onRedeem,
   });
 
   @override
   State<CoffeeCard> createState() => _CoffeeCardState();
 }
 
-class _CoffeeCardState extends State<CoffeeCard> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _shakeAnim;
-  bool _isFilled = false;
+class _CoffeeCardState extends State<CoffeeCard> {
+  final GlobalKey<ShakeAnimationWrapperState> _shakeKey = GlobalKey();
+  final GlobalKey<FillAnimationState> _fillKey = GlobalKey();
 
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 500),
-      vsync: this,
-    );
+  void _handleTap() {
+    final price = widget.coffee.price;
 
-    _shakeAnim = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0.05, 0),
-    ).chain(CurveTween(curve: Curves.elasticIn)).animate(_controller);
-  }
+    if (widget.currentToken >= price) {
+      // Trigger animasi fill lewat GlobalKey
+      _fillKey.currentState?.startFill();
 
-  void _onTap() {
-    if (widget.affordable) {
-      setState(() => _isFilled = true);
-      widget.onSuccess();
+      // Callback untuk mengurangi token
+      widget.onRedeem(price);
+
+      // Tampilkan snackbar sukses
+      showCustomSnackbar(context, "Transaksi sukses, token mencukupi");
     } else {
-      _controller.forward(from: 0);
-      widget.onFail();
-    }
-  }
+      // Trigger animasi shake via GlobalKey
+      _shakeKey.currentState?.shake();
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+      // Tampilkan snackbar gagal
+      showCustomSnackbar(context, "Transaksi gagal, token tidak mencukupi", success: false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onTap,
-      child: SlideTransition(
-        position: _shakeAnim,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-          margin: const EdgeInsets.symmetric(vertical: 10),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: _isFilled ? Colors.orange : Colors.grey[200],
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.local_cafe, size: 28),
-                  const SizedBox(width: 12),
-                  Text(
-                    widget.coffee.name,
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                ],
+      onTap: _handleTap,
+      child: ShakeAnimationWrapper(
+        key: _shakeKey,
+        child: Stack(
+          children: [
+            //Fill animation wraps entire card
+            FillAnimation(
+              key: _fillKey,
+              child: Container(
+                height: 120,
+                width: double.infinity,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: Colors.grey[300],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    const Icon(Icons.local_cafe, size: 40, color: Colors.brown),
+                    const SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(widget.coffee.name,
+                            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        Text('${widget.coffee.price} Token',
+                            style: const TextStyle(color: Colors.black54)),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              Text('${widget.coffee.price} Tokens'),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

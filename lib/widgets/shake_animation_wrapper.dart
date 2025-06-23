@@ -2,19 +2,14 @@ import 'package:flutter/material.dart';
 
 class ShakeAnimationWrapper extends StatefulWidget {
   final Widget child;
-  final bool shouldShake;
 
-  const ShakeAnimationWrapper({
-    super.key,
-    required this.child,
-    required this.shouldShake,
-  });
+  const ShakeAnimationWrapper({super.key, required this.child});
 
   @override
-  State<ShakeAnimationWrapper> createState() => _ShakeAnimationWrapperState();
+  State<ShakeAnimationWrapper> createState() => ShakeAnimationWrapperState();
 }
 
-class _ShakeAnimationWrapperState extends State<ShakeAnimationWrapper>
+class ShakeAnimationWrapperState extends State<ShakeAnimationWrapper>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _offsetAnimation;
@@ -36,12 +31,9 @@ class _ShakeAnimationWrapperState extends State<ShakeAnimationWrapper>
     ]).animate(CurvedAnimation(parent: _controller, curve: Curves.linear));
   }
 
-  @override
-  void didUpdateWidget(covariant ShakeAnimationWrapper oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.shouldShake && !oldWidget.shouldShake) {
-      _controller.forward(from: 0.0);
-    }
+  // Method yang bisa dipanggil lewat GlobalKey
+  void shake() {
+    _controller.forward(from: 0.0);
   }
 
   @override
